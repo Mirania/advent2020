@@ -14,7 +14,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        var passports = Arrays.asList(Files.readString(Path.of("src/day4/input.txt")).split("\n\n"));
+        var passports = Arrays.asList(Files.readString(Path.of("src/day4/input.txt")).split("\r\n\r\n"));
 
         System.out.printf("Part 1: %d\n", countWithValidKeys(passports));
         System.out.printf("Part 2: %d\n", countWithValidKeysAndValues(passports));
@@ -35,7 +35,7 @@ public class Main {
     }
 
     private static boolean hasValidFields(String passport) {
-        var data = passport.split(":| |\n");
+        var data = passport.split(":| |\r\n");
         for (var i=0; i<data.length; i+=2)
             if (!isValidField(data[i], data[i+1])) return false;
         return true;
