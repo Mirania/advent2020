@@ -1,5 +1,7 @@
 package day4;
 
+import utils.RegexMatcher;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,8 +49,7 @@ public class Main {
             case "iyr" -> { var year = Integer.parseInt(value); yield year >= 2010 && year <= 2020; }
             case "eyr" -> { var year = Integer.parseInt(value); yield year >= 2020 && year <= 2030; }
             case "hgt" -> {
-                var matcher = numberPattern.matcher(value); matcher.find();
-                var height = Integer.parseInt(matcher.group());
+                var height = Integer.parseInt(new RegexMatcher(numberPattern, value).getNext());
                 yield value.endsWith("cm") ? height >= 150 && height <= 193 : value.endsWith("in") ? height >= 59 && height <= 76 : false;
             }
             case "hcl" -> value.matches("#[0-9a-f]{6}");
