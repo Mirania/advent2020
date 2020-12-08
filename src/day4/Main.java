@@ -31,8 +31,8 @@ public class Main {
     }
 
     private static boolean hasAllFields(String passport) {
-        var matcher = fieldsPattern.matcher(passport); var fields = 0;
-        while (matcher.find()) fields++;
+        var matcher = new RegexMatcher(fieldsPattern, passport); var fields = 0;
+        while (matcher.getNext() != null) fields++;
         return fields == 7;
     }
 
