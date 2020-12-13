@@ -28,10 +28,8 @@ public class Main {
 
     private static long calcAdapterCombinations(List<Integer> adapters) {
         var mandatory = new boolean[adapters.size()];
-        for (var i=0; i<adapters.size(); i++) {
-            mandatory[i] = i == 0 || i == adapters.size()-1 ||
-                    adapters.get(i) - adapters.get(i-1) == 3 || adapters.get(i+1) - adapters.get(i) == 3;
-        }
+        for (var i=0; i<adapters.size(); i++)
+            mandatory[i] = i == 0 || i == adapters.size()-1 || adapters.get(i) - adapters.get(i-1) == 3;
 
         int optStart = -1, optEnd = -1;
         long combinations = 1;
