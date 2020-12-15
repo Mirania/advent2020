@@ -82,10 +82,11 @@ public class Main {
             var arr = new char[36];
             var replace = bin.length()-1;
             for (var i=1; i<=arr.length; i++) {
-                var ch = mask.mask().charAt(mask.mask().length()-i);
-                if (ch == 'X') arr[arr.length-i] = replace < 0 ? '0' : bin.charAt(replace--);
-                else if (ch == '1') arr[arr.length-i] = '1';
-                else arr[arr.length-i] = address.length()-i < 0 ? '0' : address.charAt(address.length()-i);
+                switch (mask.mask().charAt(mask.mask().length()-i)) {
+                    case 'X' -> arr[arr.length-i] = replace < 0 ? '0' : bin.charAt(replace--);
+                    case '1' -> arr[arr.length-i] = '1';
+                    default -> arr[arr.length-i] = address.length()-i < 0 ? '0' : address.charAt(address.length()-i);
+                }
             }
             positions.add(Long.parseUnsignedLong(new String(arr), 2));
         }

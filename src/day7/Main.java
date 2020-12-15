@@ -17,6 +17,28 @@ public class Main {
         System.out.printf("Part 1: %d\n", countContainedBy(rules, "shiny gold bag", null));
         System.out.printf("Part 2: %d\n", countContains(rules, "shiny gold bag"));
     }
+	
+	private static int countContainedBy(Map<String, Rule> rules, String bag, Set<String> results) {
+        if (results == null) results = new HashSet<>();
+        if (!rules.containsKey(bag)) return 0;
+
+        for (var result : rules.get(bag).containedBy()) {
+            results.add(result);
+            countContainedBy(rules, result, results);
+        }
+
+        return results.size();
+    }
+
+    private static int countContains(Map<String, Rule> tree, String bag) {
+        int count = 0;
+
+        var contained = tree.get(bag).contains();
+        for (var result : contained.keySet())
+            count += contained.get(result) + contained.get(result) * countContains(tree, result);
+
+        return count;
+    }
 
     private record Rule(Set<String> containedBy, Map<String, Integer> contains) {
         public Rule() { this(new HashSet<>(), new HashMap<>()); }
@@ -45,28 +67,6 @@ public class Main {
         });
 
         return rules;
-    }
-
-    private static int countContainedBy(Map<String, Rule> rules, String bag, Set<String> results) {
-        if (results == null) results = new HashSet<>();
-        if (!rules.containsKey(bag)) return 0;
-
-        for (var result : rules.get(bag).containedBy()) {
-            results.add(result);
-            countContainedBy(rules, result, results);
-        }
-
-        return results.size();
-    }
-
-    private static int countContains(Map<String, Rule> tree, String bag) {
-        int count = 0;
-
-        var contained = tree.get(bag).contains();
-        for (var result : contained.keySet())
-            count += contained.get(result) + contained.get(result) * countContains(tree, result);
-
-        return count;
     }
 
 }
