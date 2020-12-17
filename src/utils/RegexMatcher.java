@@ -9,19 +9,43 @@ public class RegexMatcher {
 
     private Pattern pattern;
     private Matcher matcher;
-    private String input;
     private String next;
 
     public RegexMatcher(Pattern pattern, String input) {
         this.pattern = pattern;
         this.matcher = pattern.matcher(input);
-        this.input = input;
+    }
+
+    /** this forces the use of {@link RegexMatcher#reset(String)} before it can be used */
+    public RegexMatcher(Pattern pattern) {
+        this.pattern = pattern;
+        this.matcher = pattern.matcher("");
     }
 
     public RegexMatcher(String regex, String input) {
         this.pattern = Pattern.compile(regex);
         this.matcher = pattern.matcher(input);
-        this.input = input;
+    }
+
+    /** this forces the use of {@link RegexMatcher#reset(String)} before it can be used */
+    public RegexMatcher(String regex) {
+        this.pattern = Pattern.compile(regex);
+        this.matcher = pattern.matcher("");
+    }
+
+    public static IntRegexMatcher intExtractor(String input) { return new IntRegexMatcher(input); }
+
+    public static IntRegexMatcher intExtractor() { return new IntRegexMatcher(); }
+
+    public static class IntRegexMatcher extends RegexMatcher {
+        private static Pattern numberPattern = Pattern.compile("\\d+");
+
+        public IntRegexMatcher(String input) { super(numberPattern, input); }
+
+        /** this forces the use of {@link IntRegexMatcher#reset(String)} before it can be used */
+        public IntRegexMatcher() { super(numberPattern); }
+
+        public int getNextInt() { return Integer.parseInt(super.getNext()); }
     }
 
     public boolean matches() {
@@ -60,8 +84,9 @@ public class RegexMatcher {
         return matches;
     }
 
-    public void reset() {
-        this.matcher = pattern.matcher(input);
+    public RegexMatcher reset(String input) {
+        matcher.reset(input);
+         return this;
     }
 
 }

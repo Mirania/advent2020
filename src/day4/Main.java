@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 
 public class Main {
 
-    private static Pattern numberPattern = Pattern.compile("\\d+");
     private static Pattern fieldsPattern = Pattern.compile("byr:|iyr:|eyr:|hgt:|hcl:|ecl:|pid:");
 
     public static void main(String[] args) throws IOException {
@@ -49,7 +48,7 @@ public class Main {
             case "iyr" -> { var year = Integer.parseInt(value); yield year >= 2010 && year <= 2020; }
             case "eyr" -> { var year = Integer.parseInt(value); yield year >= 2020 && year <= 2030; }
             case "hgt" -> {
-                var height = Integer.parseInt(new RegexMatcher(numberPattern, value).getNext());
+                var height = RegexMatcher.intExtractor(value).getNextInt();
                 yield value.endsWith("cm") ? height >= 150 && height <= 193 : value.endsWith("in") ? height >= 59 && height <= 76 : false;
             }
             case "hcl" -> value.matches("#[0-9a-f]{6}");

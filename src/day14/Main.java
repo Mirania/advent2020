@@ -1,16 +1,16 @@
 package day14;
 
 import utils.RegexMatcher;
+import utils.RegexMatcher.IntRegexMatcher;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class Main {
 
-    private static Pattern numberPattern = Pattern.compile("\\d+");
+    private static IntRegexMatcher matcher = RegexMatcher.intExtractor();
 
     public static void main(String[] args) throws IOException {
 
@@ -30,7 +30,7 @@ public class Main {
                 mem.put(memset.position(), memset.value() & mask.zeros() | mask.ones());
             }
         }
-        return mem.keySet().stream().mapToLong(key -> mem.get(key)).sum();
+        return mem.keySet().stream().mapToLong(mem::get).sum();
     }
 
     private static long runFloatingAndSum(List<String> input) {
@@ -43,7 +43,7 @@ public class Main {
                 memset.positions().forEach(pos -> mem.put(pos, memset.value()));
             }
         }
-        return mem.keySet().stream().mapToLong(key -> mem.get(key)).sum();
+        return mem.keySet().stream().mapToLong(mem::get).sum();
     }
 
     private record SimpleMask(long zeros, long ones) { }
@@ -67,8 +67,8 @@ public class Main {
     }
 
     private static SimpleMemset parseSimpleMemset(String line) {
-        var matcher = new RegexMatcher(numberPattern, line);
-        return new SimpleMemset(Integer.parseInt(matcher.getNext()), Long.parseLong(matcher.getNext()));
+        matcher.reset(line);
+        return new SimpleMemset(matcher.getNextInt(), matcher.getNextInt());
     }
 
     private static FloatingMemset parseFloatingMemset(String line, FloatingMask mask) {
