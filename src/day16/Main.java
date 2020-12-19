@@ -65,7 +65,7 @@ public class Main {
         var sections = input.split("\r\n\r\n");
 
         var matcher = RegexMatcher.intExtractor();
-        var rules = Arrays.stream(sections[0].split("\r\n")).map(rule -> {
+        var rules = sections[0].lines().map(rule -> {
             matcher.reset(rule);
             return new Rule(rule.split(":")[0], matcher.getNextInt(), matcher.getNextInt(), matcher.getNextInt(), matcher.getNextInt());
         }).collect(Collectors.toList());
@@ -73,7 +73,7 @@ public class Main {
         var myTicket = Arrays.stream(sections[1].split("\r\n")[1].split(","))
                 .map(Integer::parseInt).collect(Collectors.toList());
 
-        var tickets = Arrays.stream(sections[2].split("\r\n"))
+        var tickets = sections[2].lines()
                 .filter(t -> !t.startsWith("n")).map(nums ->
                         Arrays.asList(nums.split(",")).stream().map(Integer::parseInt).collect(Collectors.toList())
                 ).collect(Collectors.toList());
