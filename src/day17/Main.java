@@ -60,8 +60,8 @@ public class Main {
         private int lowestY, highestY; // real array positions
         private int lowestZ, highestZ; // real array positions
         private int lowestW, highestW; // real array positions
-        private int offset;
-        private boolean is3D;
+        private final int offset;
+        private final boolean is3D;
 
         /**
          * offset = how much space there should be between the origin and the negative limit of an axis.

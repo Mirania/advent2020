@@ -10,6 +10,7 @@ public class RegexMatcher {
     private Pattern pattern;
     private Matcher matcher;
     private String next;
+    private int nextPosition;
 
     public RegexMatcher(Pattern pattern, String input) {
         this.pattern = pattern;
@@ -46,6 +47,8 @@ public class RegexMatcher {
         public IntRegexMatcher() { super(numberPattern); }
 
         public int getNextInt() { return Integer.parseInt(super.getNext()); }
+
+        public IntRegexMatcher reset(String input) { return (IntRegexMatcher) super.reset(input); }
     }
 
     public boolean matches() {
@@ -57,8 +60,10 @@ public class RegexMatcher {
             return true;
 
         var found = matcher.find();
-        if (found)
+        if (found) {
             next = matcher.group();
+            nextPosition = matcher.start();
+        }
 
         return found;
     }
@@ -74,6 +79,16 @@ public class RegexMatcher {
         return found ? matcher.group() : null;
     }
 
+    public int getNextPosition() {
+        if (next != null) {
+            next = null;
+            return nextPosition;
+        }
+
+        var found = matcher.find();
+        return found ? matcher.start() : -1;
+    }
+
     public List<String> getAllMatches() {
         var matches = new ArrayList<String>();
         String match;
@@ -84,9 +99,18 @@ public class RegexMatcher {
         return matches;
     }
 
+    public int countMatches() {
+        var matches = 0;
+
+        while (getNext() != null)
+            matches++;
+
+        return matches;
+    }
+
     public RegexMatcher reset(String input) {
         matcher.reset(input);
-         return this;
+        return this;
     }
 
 }
